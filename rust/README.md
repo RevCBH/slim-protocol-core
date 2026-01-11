@@ -35,6 +35,60 @@ let slim = encode(&data, Default::default()).unwrap();
 - **C FFI ready** - can be called from C, Go, Python, etc.
 - **WebAssembly** - compile to WASM for browser usage
 
+## CLI Tool
+
+SLIM includes a powerful `jq`-like CLI tool for converting, querying, and manipulating data:
+
+```bash
+# Install the CLI tool
+cargo install --path .
+
+# Encode JSON to SLIM
+echo '[{"id":1,"name":"Mario"}]' | slim encode --stats
+# Output: |1|id#,name$|
+#         1,Mario
+# Statistics:
+#   JSON: 25 chars
+#   SLIM: 19 chars
+#   Savings: 24%
+
+# Decode SLIM to JSON
+echo '|1|id#,name$|
+1,Mario' | slim decode --pretty
+# Output: [{"id": 1, "name": "Mario"}]
+
+# Query data (jq-like)
+echo '{"users":[{"name":"Mario"}]}' | slim query '.users'
+# Output: [{"name": "Mario"}]
+
+# Get statistics
+echo '[{"id":1,"name":"Alice"}]' | slim stats
+# Shows token savings and data structure info
+
+# Infer schema
+echo '[{"id":1,"active":true}]' | slim infer-schema
+# Output: id#,active?
+
+# Validate against schema
+echo '[{"id":1}]' | slim validate --schema 'id#,name$'
+# Output: ✗ Validation failed: Missing required field 'name'
+```
+
+### CLI Commands
+
+- `slim encode` - Convert JSON to SLIM format
+- `slim decode` - Convert SLIM to JSON format
+- `slim query <expr>` - Query data with jq-like expressions (`.`, `.key`, `.[n]`, `.[]`, `length`, `keys`, `type`)
+- `slim stats` - Show token savings statistics
+- `slim infer-schema` - Infer schema from data
+- `slim validate --schema <schema>` - Validate data against schema
+- `slim format` - Pretty-print JSON or normalize SLIM
+
+All commands support:
+- `--input <file>` or stdin
+- `--output <file>` or stdout
+- `--format json|slim` for input format
+
 ## Installation
 
 Add to your `Cargo.toml`:
