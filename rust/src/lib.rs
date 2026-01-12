@@ -34,9 +34,12 @@ pub mod decoder;
 pub mod schema;
 pub mod utils;
 pub mod error;
+pub mod stream;
 
 pub use types::{Value, EncodeOptions, DecodeOptions};
 pub use encoder::encode;
 pub use decoder::decode;
 pub use schema::{infer_schema, parse_schema, validate_schema};
 pub use error::{SlimError, Result};
+pub use stream::{SlimEncoder, SlimDecoder, encode_chunked, decode_iter, collect};
+pub use utils::{deep_equal, clone, get_path, set_path, estimate_tokens, calculate_savings};

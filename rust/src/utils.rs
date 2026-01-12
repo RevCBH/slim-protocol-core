@@ -38,15 +38,15 @@ pub fn estimate_tokens(s: &str) -> usize {
 ///
 /// let savings = calculate_savings("|2|id#|\\n1\\n2", "[{\"id\":1},{\"id\":2}]");
 /// ```
-pub fn calculate_savings(slim_str: &str, json_str: &str) -> u32 {
-    let slim_tokens = estimate_tokens(slim_str);
-    let json_tokens = estimate_tokens(json_str);
+pub fn calculate_savings(slim_str: &str, json_str: &str) -> i32 {
+    let slim_tokens = estimate_tokens(slim_str) as i32;
+    let json_tokens = estimate_tokens(json_str) as i32;
 
     if json_tokens == 0 {
         return 0;
     }
 
-    (((json_tokens - slim_tokens) as f64 / json_tokens as f64) * 100.0).round() as u32
+    (((json_tokens - slim_tokens) as f64 / json_tokens as f64) * 100.0).round() as i32
 }
 
 /// Deep equality check for JSON values (handles NaN correctly).
